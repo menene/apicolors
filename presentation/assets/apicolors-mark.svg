@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-labelledby="title desc">
+  <title id="title">API a todo color</title>
+  <desc id="desc">Cinco bloques de color alrededor de un punto central</desc>
+  <rect width="320" height="320" rx="72" fill="#ffffff"/>
+  <rect x="50" y="50" width="96" height="96" rx="24" fill="#4d36d8"/>
+  <rect x="174" y="50" width="96" height="96" rx="24" fill="#23b9cf"/>
+  <rect x="50" y="174" width="96" height="96" rx="24" fill="#b8dd20"/>
+  <rect x="174" y="174" width="96" height="96" rx="24" fill="#ea4c89"/>
+  <circle cx="160" cy="160" r="37" fill="#f3c63f" stroke="#ffffff" stroke-width="12"/>
+</svg>

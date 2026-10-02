@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Presentación del taller API a todo color.">
+    <title>API a todo color · Taller</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/white.min.css">
+    <style>
+      :root {
+        --r-background-color: #f7f8fc;
+        --r-main-font: Inter, ui-sans-serif, system-ui, sans-serif;
+        --r-heading-font: Inter, ui-sans-serif, system-ui, sans-serif;
+        --r-main-font-size: 31px;
+        --r-main-color: #161527;
+        --r-heading-color: #161527;
+        --r-link-color: #4d36d8;
+        --page: #f7f8fc;
+        --surface: #ffffff;
+        --soft: #eef0f7;
+        --ink: #161527;
+        --muted: #5d5d70;
+        --line: #dfe2eb;
+        --primary: #4d36d8;
+        --primary-deep: #322294;
+        --cyan: #23b9cf;
+        --lime: #9cbc15;
+        --yellow: #f3c63f;
+        --orange: #e97824;
+        --pink: #ea4c89;
+        --danger: #c63434;
+        --green: #16865d;
+      }
+
+      * { box-sizing: border-box; }
+      .reveal-viewport { background: var(--page); }
+      .reveal { color: var(--ink); font-family: var(--r-main-font); }
+      .reveal .slides { text-align: left; }
+      .reveal .slides > section {
+        width: 100%;
+        height: 100%;
+        padding: 54px 70px;
+      }
+      .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+        margin: 0;
+        color: var(--ink);
+        font-family: var(--r-heading-font);
+        font-weight: 850;
+        letter-spacing: -.045em;
+        text-transform: none;
+      }
+      .reveal h1 { font-size: 3.45em; line-height: .9; }
+      .reveal h2 { font-size: 2.25em; line-height: .98; }
+      .reveal h3 { font-size: 1.1em; letter-spacing: -.025em; }
+      .reveal p { line-height: 1.5; }
+      .reveal a { color: var(--primary); }
+      .reveal .progress { height: 6px; color: var(--primary); }
+      .reveal .controls { color: var(--primary); }
+      .reveal .slide-number {
+        right: auto;
+        bottom: 20px;
+        left: 28px;
+        min-width: 62px;
+        padding: 7px 11px;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        color: var(--muted);
+        background: rgba(255, 255, 255, .92);
+        font: 600 14px "Fira Code", monospace;
+        text-align: center;
+      }
+
+      .slide-shell { display: flex; width: 100%; height: 100%; flex-direction: column; justify-content: center; }
+      .slide-shell.top { justify-content: flex-start; }
+      .eyebrow { display: flex; align-items: center; gap: 15px; margin: 0 0 24px !important; color: var(--primary); font-size: .56em; font-weight: 900; letter-spacing: .16em; text-transform: uppercase; }
+      .eyebrow::before { width: 45px; height: 5px; background: currentColor; content: ""; }
+      .lead { max-width: 1180px; margin: 28px 0 0 !important; color: var(--muted); font-size: 1.05em; line-height: 1.55 !important; }
+      .small { color: var(--muted); font-size: .65em; }
+      .mono { font-family: "Fira Code", monospace; }
+      .accent { color: var(--primary); }
+      .color-text { color: transparent; background: linear-gradient(95deg, var(--primary), var(--cyan) 40%, var(--lime) 67%, var(--pink)); background-clip: text; -webkit-background-clip: text; }
+      .chapter { text-align: center; }
+      .chapter .number { display: grid; width: 86px; height: 86px; margin: 0 auto 30px; place-items: center; border-radius: 24px; color: #fff; background: var(--primary); font: 800 .8em "Fira Code", monospace; transform: rotate(-3deg); }
+      .chapter p { max-width: 900px; margin: 25px auto 0 !important; color: var(--muted); }
+      .top-rule { position: absolute; top: 0; left: 0; width: 100%; height: 10px; background: linear-gradient(90deg, var(--primary) 0 25%, var(--cyan) 25% 45%, var(--lime) 45% 63%, var(--yellow) 63% 81%, var(--pink) 81%); }
+
+      .cover { display: grid; grid-template-columns: 1fr 470px; align-items: center; gap: 80px; }
+      .cover-mark { position: relative; }
+      .cover-mark::before { position: absolute; inset: -25px 30px 35px -20px; z-index: -1; border-radius: 60px; background: var(--yellow); content: ""; transform: rotate(-5deg); }
+      .cover-mark img { display: block; width: 100%; border: 1px solid var(--line); border-radius: 60px; background: white; box-shadow: 0 30px 80px rgba(42, 37, 91, .16); transform: rotate(2deg); }
+      .presenter { display: flex; gap: 25px; margin-top: 42px; color: var(--muted); font-size: .68em; }
+      .presenter span { display: flex; align-items: center; gap: 9px; }
+      .profile { display: grid; grid-template-columns: 260px 1fr; align-items: center; gap: 46px; margin-top: 34px; }
+      .profile-photo { width: 230px; height: 230px; border: 8px solid var(--surface); border-radius: 50%; object-fit: cover; box-shadow: 0 18px 48px rgba(42, 37, 91, .14); }
+
+      .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: 34px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 32px; }
+      .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 30px; }
+      .card { padding: 28px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); box-shadow: 0 12px 35px rgba(42, 37, 91, .06); }
+      .card h3 { margin: 14px 0 8px; }
+      .card p { margin: 0; color: var(--muted); font-size: .71em; }
+      .card-icon { display: grid; width: 56px; height: 56px; place-items: center; border-radius: 15px; color: #fff; background: var(--card-color, var(--primary)); font-size: 1.05em; }
+      .metric { font-size: 2.1em; font-weight: 900; letter-spacing: -.06em; line-height: 1; }
+      .metric-label { margin-top: 9px; color: var(--muted); font-size: .66em; }
+      .badge { display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px; border: 1px solid var(--line); border-radius: 9px; color: var(--primary-deep); background: color-mix(in srgb, var(--primary) 8%, white); font: 700 .5em "Fira Code", monospace; }
+      .badges { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
+
+      .flow { display: grid; grid-template-columns: repeat(5, 1fr); margin-top: 42px; overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: var(--surface); box-shadow: 0 18px 48px rgba(42, 37, 91, .08); }
+      .flow-step { position: relative; min-height: 285px; padding: 27px 22px; border-right: 1px solid var(--line); }
+      .flow-step:last-child { border: 0; }
+      .flow-step::before { position: absolute; inset: 0 0 auto; height: 7px; background: var(--flow-color); content: ""; }
+      .flow-step .index { color: var(--flow-color); font: 900 .55em "Fira Code", monospace; }
+      .flow-step i { display: block; margin: 45px 0 22px; color: var(--flow-color); font-size: 1.35em; }
+      .flow-step strong { display: block; font-size: .7em; }
+      .flow-step p { margin: 10px 0 0; color: var(--muted); font-size: .55em; }
+
+      .contract { display: grid; grid-template-columns: .8fr 1.2fr; gap: 28px; margin-top: 32px; }
+      .route { display: grid; grid-template-columns: 105px 1fr; align-items: center; gap: 15px; padding: 19px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+      .route + .route { margin-top: 12px; }
+      .method { padding: 8px 10px; border-radius: 8px; color: #fff; background: var(--green); text-align: center; font: 800 .55em "Fira Code", monospace; }
+      .method.post { background: var(--primary); }
+      .route code { font-size: .6em; }
+      .error-flow { display: grid; grid-template-columns: 1fr 70px 1fr 70px 1fr; align-items: stretch; margin-top: 30px; }
+      .error-step { min-height: 225px; padding: 27px; border: 1px solid var(--line); border-radius: 19px; background: var(--surface); }
+      .error-step.danger { border-color: var(--danger); color: #fff; background: var(--danger); }
+      .error-step .label { display: block; margin-bottom: 28px; color: var(--primary); font: 800 .48em "Fira Code", monospace; letter-spacing: .06em; }
+      .error-step.danger .label { color: #fff; opacity: .8; }
+      .error-step strong { display: block; font-size: .76em; }
+      .error-step .value { display: block; margin-top: 12px; font: 700 .58em "Fira Code", monospace; }
+      .error-step p { margin: 10px 0 0; color: var(--muted); font-size: .55em; line-height: 1.4; }
+      .error-step.danger p { color: #fff; }
+      .error-step.danger strong { font-size: 1.8em; line-height: 1; }
+      .error-arrow { display: grid; place-items: center; color: var(--primary); font-size: .9em; }
+      .error-anatomy { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; margin-top: 18px; }
+      .error-part { padding: 18px 20px; border-radius: 14px; background: var(--soft); }
+      .error-part code { color: var(--primary-deep); font-size: .5em; font-weight: 700; }
+      .error-part p { margin: 7px 0 0; color: var(--muted); font-size: .47em; line-height: 1.35; }
+
+      .pipeline { display: flex; align-items: stretch; gap: 12px; margin-top: 42px; }
+      .pipeline-step { display: flex; min-width: 0; flex: 1; padding: 25px 16px; border: 1px solid var(--line); border-radius: 17px; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: var(--surface); }
+      .pipeline-step i { margin-bottom: 16px; color: var(--primary); font-size: 1.2em; }
+      .pipeline-step strong { font-size: .64em; }
+      .pipeline-step small { margin-top: 7px; color: var(--muted); font-size: .46em; }
+      .pipeline-arrow { display: grid; place-items: center; color: var(--primary); font-size: .8em; }
+
+      .cluster-demo { display: grid; grid-template-columns: 1fr 100px 1fr; align-items: center; gap: 25px; margin-top: 30px; }
+      .pixel-field { position: relative; height: 360px; overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); }
+      .dot { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: var(--dot); transform: translate(-50%, -50%); }
+      .sample-label { position: absolute; right: 18px; bottom: 14px; z-index: 1; padding: 5px 8px; border-radius: 7px; color: var(--muted); background: rgba(255, 255, 255, .9); font: 600 .42em "Fira Code", monospace; }
+      .palette-output { display: grid; height: 360px; grid-template-rows: 36fr 27fr 20fr 10fr 7fr; overflow: hidden; border: 8px solid white; border-radius: 24px; box-shadow: 0 0 0 1px var(--line), 0 18px 48px rgba(42, 37, 91, .1); }
+      .palette-output div { display: flex; align-items: center; justify-content: space-between; padding: 0 28px; color: white; font: 700 .58em "Fira Code", monospace; text-shadow: 0 1px 3px rgba(0,0,0,.35); }
+
+      .architecture { display: grid; grid-template-columns: 1fr 95px 1fr; align-items: stretch; margin-top: 40px; }
+      .service { padding: 34px; border: 1px solid var(--line); border-radius: 22px; background: var(--surface); box-shadow: 0 16px 45px rgba(42, 37, 91, .07); }
+      .service-head { display: flex; align-items: center; gap: 18px; }
+      .service-logo { width: 58px; height: 58px; object-fit: contain; }
+      .service p { color: var(--muted); font-size: .68em; }
+      .arrow { position: relative; display: grid; place-items: center; color: var(--primary); font-size: 1.2em; }
+
+      .exercise { border: 3px solid var(--primary); background: var(--surface); }
+      .exercise-grid { margin-top: 42px; }
+      .checklist { display: grid; gap: 18px; margin: 0; padding: 0; list-style: none; }
+      .checklist li { display: grid; grid-template-columns: 38px 1fr; align-items: start; gap: 14px; font-size: .76em; }
+      .checklist i { margin-top: 4px; color: var(--green); }
+      .branch { display: flex; align-items: center; justify-content: space-between; margin-top: 24px; padding: 18px 22px; border-radius: 13px; background: var(--soft); }
+      .branch span { color: var(--muted); font-size: .58em; font-weight: 700; }
+      .branch strong { color: var(--primary-deep); font: 700 .58em "Fira Code", monospace; }
+
+      .table { width: 100%; margin-top: 30px; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; font-size: .65em; }
+      .table th, .table td { padding: 15px 18px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; }
+      .table th:last-child, .table td:last-child { border-right: 0; }
+      .table tr:last-child td { border-bottom: 0; }
+      .table th { color: var(--primary-deep); background: var(--soft); font-size: .9em; }
+      .table td { background: var(--surface); }
+
+      .logo-row { display: flex; align-items: center; gap: 25px; margin-top: 36px; }
+      .logo-item { display: flex; min-width: 155px; padding: 20px; border: 1px solid var(--line); border-radius: 16px; flex-direction: column; align-items: center; gap: 12px; background: var(--surface); font-size: .56em; font-weight: 750; }
+      .logo-item img { width: 58px; height: 58px; object-fit: contain; }
+      .logo-item i { display: grid; height: 58px; place-items: center; font-size: 2.05em; }
+
+      .quote { max-width: 1120px; padding-left: 34px; border-left: 8px solid var(--primary); font-size: 1.3em; font-weight: 700; line-height: 1.35; letter-spacing: -.035em; }
+      .warning { padding: 22px 26px; border: 1px solid #efc977; border-radius: 16px; color: #784b00; background: #fff9e8; font-size: .68em; }
+      .success { padding: 22px 26px; border: 1px solid #8bcbb1; border-radius: 16px; color: #0c5a3d; background: #eefaf5; font-size: .68em; }
+      .fragment.fade-up { transform: translateY(25px); }
+
+      @media (max-width: 900px) {
+        .cover, .profile, .grid-2, .grid-3, .grid-4, .contract, .architecture { grid-template-columns: 1fr; }
+        .cover-mark { display: none; }
+        .profile-photo { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+        <section>
+          <div class="top-rule"></div>
+          <div class="slide-shell cover">
+            <div>
+              <h1>API a<br><span class="color-text">todo color</span></h1>
+              <p class="lead">Diseño e implementación de una API con FastAPI, procesamiento de imágenes y K-means.</p>
+              <div class="presenter">
+                <span><i class="fa-solid fa-user"></i> Erick Marroquin</span>
+                <span><i class="fa-brands fa-github"></i> @menene</span>
+              </div>
+            </div>
+            <div class="cover-mark"><img src="assets/apicolors-mark.svg" alt="Marca de API a todo color"></div>
+          </div>
+          <aside class="notes">Presentación personal: experiencia, contexto del curso y por qué se eligió un proyecto de procesamiento de imágenes.</aside>
+        </section>
+
+        <section>
+          <div class="slide-shell">
+            <p class="eyebrow">Introducción</p>
+            <div class="profile">
+              <img class="profile-photo" src="https://avatars.githubusercontent.com/u/1200545?v=4" alt="Erick Marroquin">
+              <div>
+                <h2>Erick Marroquin</h2>
+                <div class="grid-3">
+                  <article class="card"><span class="card-icon"><i class="fa-solid fa-laptop-code"></i></span><h3>Desarrollo</h3><p>Software, backend, aplicaciones web y APIs.</p></article>
+                  <article class="card"><span class="card-icon" style="--card-color:var(--cyan)"><i class="fa-solid fa-chalkboard-user"></i></span><h3>Docencia</h3><p>Programación y desarrollo de software con ejercicios prácticos.</p></article>
+                  <article class="card"><span class="card-icon" style="--card-color:var(--pink)"><i class="fa-brands fa-github"></i></span><h3>@menene</h3><p>Proyectos y material de clase disponibles en GitHub.</p></article>
+                </div>
+              </div>
+            </div>
+          </div>
+          <aside class="notes">Presentación breve. El objetivo del taller es diseñar, implementar y probar la API.</aside>
+        </section>
+
+        <section>
+          <div class="slide-shell">
+            <p class="eyebrow">Objetivo</p>
+            <h2>API de colores dominantes</h2>
+            <div class="grid-3">
+              <article class="card">
+                <span class="card-icon" style="--card-color:var(--cyan)"><i class="fa-regular fa-image"></i></span>
+                <h3>Entrada</h3>
+                <p>Una imagen JPEG, PNG o WebP y una cantidad entre 3 y 8 colores.</p>
+                <div class="badges"><span class="badge">multipart/form-data</span><span class="badge">máximo 5 MB</span></div>
+              </article>
+              <article class="card">
+                <span class="card-icon"><i class="fa-solid fa-code"></i></span>
+                <h3>Endpoint</h3>
+                <p><span class="mono">POST /api/v1/palettes</span> procesa la imagen sin guardarla.</p>
+                <div class="badges"><span class="badge">FastAPI</span><span class="badge">HTTP</span></div>
+              </article>
+              <article class="card">
+                <span class="card-icon" style="--card-color:var(--pink)"><i class="fa-solid fa-swatchbook"></i></span>
+                <h3>Salida</h3>
+                <p>Colores dominantes ordenados por frecuencia, con HEX, RGB y porcentaje.</p>
+                <div class="badges"><span class="badge">JSON</span><span class="badge">respuesta tipada</span></div>
+              </article>
+            </div>
+            <p class="lead">Primero validaremos el contrato y todos los casos con Postman. El frontend se mostrará al final.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell chapter">
+            <span class="number">00</span>
+            <h2>Punto de partida</h2>
+            <p class="mono">00-starter</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Antes de comenzar</p>
+            <h2>Conocimientos previos</h2>
+            <div class="grid-4">
+              <article class="card"><span class="card-icon"><i class="fa-brands fa-python"></i></span><h3>Python</h3><p>Funciones, módulos, tipos y manejo básico de excepciones.</p></article>
+              <article class="card"><span class="card-icon" style="--card-color:var(--cyan)"><i class="fa-solid fa-globe"></i></span><h3>HTTP</h3><p>Métodos, estados, headers, JSON y formularios.</p></article>
+              <article class="card"><span class="card-icon" style="--card-color:var(--orange)"><i class="fa-solid fa-paper-plane"></i></span><h3>Postman</h3><p>Peticiones HTTP, headers, body form-data y lectura de respuestas.</p></article>
+              <article class="card"><span class="card-icon" style="--card-color:var(--pink)"><i class="fa-brands fa-docker"></i></span><h3>Docker</h3><p>Construir imágenes e iniciar servicios con Compose.</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Proceso completo</p>
+            <h2>Flujo de la aplicación</h2>
+            <div class="flow">
+              <div class="flow-step" style="--flow-color:var(--primary)"><span class="index">01 / REQUEST</span><i class="fa-solid fa-cloud-arrow-up"></i><strong>Enviar</strong><p>Postman envía la imagen.</p></div>
+              <div class="flow-step" style="--flow-color:var(--cyan)"><span class="index">02 / API</span><i class="fa-solid fa-code"></i><strong>Validar</strong><p>FastAPI comprueba formato y límites.</p></div>
+              <div class="flow-step" style="--flow-color:var(--lime)"><span class="index">03 / IMAGE</span><i class="fa-solid fa-image"></i><strong>Preparar</strong><p>Pillow normaliza los píxeles.</p></div>
+              <div class="flow-step" style="--flow-color:var(--orange)"><span class="index">04 / K-MEANS</span><i class="fa-solid fa-circle-nodes"></i><strong>Agrupar</strong><p>El modelo identifica clusters.</p></div>
+              <div class="flow-step" style="--flow-color:var(--pink)"><span class="index">05 / RESPONSE</span><i class="fa-solid fa-file-code"></i><strong>Responder</strong><p>La API devuelve la paleta en JSON.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell chapter">
+            <span class="number">01</span>
+            <h2>API base</h2>
+            <p class="mono">01-api-foundation</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Responsabilidades</p>
+            <h2>Contrato de la API</h2>
+            <div class="grid-3">
+              <article class="card"><span class="card-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></span><h3>Recibir</h3><p>Imagen, tipo de contenido y cantidad de colores mediante <span class="mono">multipart/form-data</span>.</p></article>
+              <article class="card"><span class="card-icon" style="--card-color:var(--cyan)"><i class="fa-solid fa-gears"></i></span><h3>Procesar</h3><p>Validar el archivo, normalizar sus píxeles y ejecutar K-means.</p></article>
+              <article class="card"><span class="card-icon" style="--card-color:var(--pink)"><i class="fa-solid fa-arrow-right-from-bracket"></i></span><h3>Responder</h3><p>Devolver JSON tipado con colores, porcentajes, dimensiones y tiempo.</p></article>
+            </div>
+            <p class="lead">El contrato define qué acepta la API, qué devuelve y qué errores puede producir.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Versionado</p>
+            <h2>Versionado de la API</h2>
+            <div class="grid-3">
+              <article class="card"><span class="card-icon"><i class="fa-solid fa-link"></i></span><h3>Versión actual</h3><p>Todos los endpoints están bajo <span class="mono">/api/v1</span>.</p></article>
+              <article class="card"><span class="card-icon" style="--card-color:var(--cyan)"><i class="fa-solid fa-code-branch"></i></span><h3>Nuevas versiones</h3><p>Una versión nueva puede convivir con la anterior.</p></article>
+              <article class="card"><span class="card-icon" style="--card-color:var(--pink)"><i class="fa-solid fa-book"></i></span><h3>OpenAPI</h3><p>Swagger muestra los endpoints, campos y estados HTTP.</p></article>
+            </div>
+            <div class="success" style="margin-top:28px">El versionado permite cambiar la API sin modificar clientes existentes.</div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Endpoints</p>
+            <h2>Endpoints</h2>
+            <div class="contract">
+              <div>
+                <div class="route"><span class="method">GET</span><span class="mono">/api/v1/ping</span></div>
+                <div class="route"><span class="method post">POST</span><span class="mono">/api/v1/palettes</span></div>
+                <div class="route"><span class="method">GET</span><span class="mono">/docs</span></div>
+              </div>
+              <div class="card" style="display:grid;place-items:center;text-align:center">
+                <span class="card-icon" style="--card-color:var(--green)"><i class="fa-solid fa-heart-pulse"></i></span>
+                <h3>Ping</h3>
+                <div class="metric" style="color:var(--green)">pong</div>
+                <p>Confirma que la API está disponible.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Errores HTTP</p>
+            <h2>Qué pasa cuando una petición falla</h2>
+            <div class="error-flow">
+              <div class="error-step">
+                <span class="label">1 / REQUEST</span>
+                <strong>Postman envía un archivo</strong>
+                <span class="value">imagen: documento.pdf</span>
+                <p>La petición llega a <span class="mono">POST /api/v1/palettes</span>.</p>
+              </div>
+              <div class="error-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="error-step">
+                <span class="label">2 / VALIDACIÓN</span>
+                <strong>La API revisa el archivo</strong>
+                <span class="value">application/pdf</span>
+                <p>El MIME no corresponde a JPEG, PNG o WebP. K-means no se ejecuta.</p>
+              </div>
+              <div class="error-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="error-step danger">
+                <span class="label">3 / RESPONSE</span>
+                <strong>415</strong>
+                <span class="value">unsupported_media_type</span>
+                <p>La API rechaza la petición y explica el motivo.</p>
+              </div>
+            </div>
+            <div class="error-anatomy">
+              <div class="error-part"><code>HTTP 415</code><p>Indica al cliente qué ocurrió a nivel HTTP.</p></div>
+              <div class="error-part"><code>error.code</code><p>Permite tomar decisiones sin comparar mensajes.</p></div>
+              <div class="error-part"><code>error.message</code><p>Explica el problema a una persona.</p></div>
+              <div class="error-part"><code>error.request_id</code><p>Relaciona la respuesta con los logs de la API.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="exercise">
+          <div class="slide-shell top">
+            <p class="eyebrow">Práctica 1</p>
+            <h2>API base</h2>
+            <div class="exercise-grid">
+              <ul class="checklist">
+                <li><i class="fa-solid fa-check"></i><span>Crear la aplicación FastAPI y el router de la versión 1.</span></li>
+                <li><i class="fa-solid fa-check"></i><span>Implementar el endpoint de ping.</span></li>
+                <li><i class="fa-solid fa-check"></i><span>Confirmar la respuesta y revisar Swagger.</span></li>
+              </ul>
+            </div>
+            <div class="branch"><span><i class="fa-solid fa-code-branch"></i> Rama</span><strong>01-api-foundation</strong></div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell chapter">
+            <span class="number">02</span>
+            <h2>Paleta de colores</h2>
+            <p class="mono">02-palette-api</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Pipeline</p>
+            <h2>Procesamiento de la imagen</h2>
+            <div class="pipeline">
+              <div class="pipeline-step"><i class="fa-solid fa-file-arrow-up"></i><strong>Bytes</strong><small>Máximo 5 MB</small></div><span class="pipeline-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+              <div class="pipeline-step"><i class="fa-solid fa-rotate"></i><strong>EXIF</strong><small>Corrige orientación</small></div><span class="pipeline-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+              <div class="pipeline-step"><i class="fa-solid fa-droplet"></i><strong>RGB</strong><small>Formato uniforme</small></div><span class="pipeline-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+              <div class="pipeline-step"><i class="fa-solid fa-compress"></i><strong>Thumbnail</strong><small>Máximo 200 × 200</small></div><span class="pipeline-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+              <div class="pipeline-step"><i class="fa-solid fa-table-cells"></i><strong>NumPy</strong><small>Matriz N × 3</small></div><span class="pipeline-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+              <div class="pipeline-step"><i class="fa-solid fa-circle-nodes"></i><strong>K-means</strong><small>Clusters RGB</small></div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Machine learning</p>
+            <h2>K-means</h2>
+            <div class="cluster-demo">
+              <div class="pixel-field" id="kmeans-sample" aria-label="Muestra de 100 píxeles: 36 morados, 27 celestes, 20 verdes, 10 rosas y 7 amarillos">
+                <span class="sample-label">100 píxeles de muestra</span>
+              </div>
+              <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="palette-output" aria-label="Paleta agrupada"><div style="background:#4d36d8"><span>#4D36D8</span><span>36%</span></div><div style="background:#23b9cf"><span>#23B9CF</span><span>27%</span></div><div style="background:#9cbc15"><span>#9CBC15</span><span>20%</span></div><div style="background:#ea4c89"><span>#EA4C89</span><span>10%</span></div><div style="background:#d4a91c"><span>#D4A91C</span><span>7%</span></div></div>
+            </div>
+          </div>
+          <aside class="notes">Cada punto representa un píxel. Los puntos del mismo color quedan en el mismo grupo. El porcentaje indica cuántos píxeles contiene cada grupo.</aside>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Agrupamiento de colores</p>
+            <h2>Cómo funciona K-means</h2>
+            <div class="grid-4">
+              <article class="card"><span class="card-icon">1</span><h3>Leer</h3><p>Cada píxel se representa con sus valores rojo, verde y azul.</p></article>
+              <article class="card"><span class="card-icon" style="--card-color:var(--cyan)">2</span><h3>Comparar</h3><p>El algoritmo mide qué píxeles tienen colores parecidos.</p></article>
+              <article class="card"><span class="card-icon" style="--card-color:var(--orange)">3</span><h3>Agrupar</h3><p>Los píxeles similares se reúnen en la cantidad de grupos solicitada.</p></article>
+              <article class="card"><span class="card-icon" style="--card-color:var(--pink)">4</span><h3>Resumir</h3><p>Cada grupo produce un color representativo y un porcentaje.</p></article>
+            </div>
+            <div class="success" style="margin-top:28px"><strong>Ejemplo:</strong> si solicitamos 5 colores, K-means divide los píxeles en 5 grupos y la API devuelve un color por grupo.</div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Respuesta</p>
+            <h2>Respuesta de la API</h2>
+            <div class="grid-2">
+              <div class="palette-output" aria-label="Ejemplo de paleta"><div style="background:#4d36d8"><span>#4D36D8</span><span>36%</span></div><div style="background:#23b9cf"><span>#23B9CF</span><span>27%</span></div><div style="background:#9cbc15"><span>#9CBC15</span><span>20%</span></div><div style="background:#ea4c89"><span>#EA4C89</span><span>10%</span></div><div style="background:#d4a91c"><span>#D4A91C</span><span>7%</span></div></div>
+              <div>
+                <article class="card"><div class="metric">HEX</div><div class="metric-label">Representación hexadecimal</div></article>
+                <article class="card" style="margin-top:14px"><div class="metric">RGB</div><div class="metric-label">Valores rojo, verde y azul</div></article>
+                <article class="card" style="margin-top:14px"><div class="metric">%</div><div class="metric-label">Proporción de píxeles</div></article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Postman</p>
+            <h2>Probar la API</h2>
+            <table class="table">
+              <thead><tr><th>Caso</th><th>Estado</th><th>Qué confirma</th></tr></thead>
+              <tbody>
+                <tr><td>Ping</td><td>200</td><td>Disponibilidad y request ID</td></tr>
+                <tr><td>Sin imagen</td><td>422</td><td>Campo obligatorio</td></tr>
+                <tr><td>MIME no permitido</td><td>415</td><td>JPEG, PNG o WebP</td></tr>
+                <tr><td>Archivo mayor a 5 MB</td><td>413</td><td>Límite de lectura</td></tr>
+                <tr><td>Imagen válida</td><td>200</td><td>Paleta, dimensiones y porcentajes</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="exercise">
+          <div class="slide-shell top">
+            <p class="eyebrow">Práctica 2</p>
+            <h2>Endpoint de paletas</h2>
+            <div class="exercise-grid">
+              <ul class="checklist">
+                <li><i class="fa-solid fa-check"></i><span>Validar tipo, tamaño y cantidad de colores.</span></li>
+                <li><i class="fa-solid fa-check"></i><span>Convertir la imagen en una matriz RGB.</span></li>
+                <li><i class="fa-solid fa-check"></i><span>Ejecutar K-means y devolver la respuesta tipada.</span></li>
+              </ul>
+            </div>
+            <div class="branch"><span><i class="fa-solid fa-code-branch"></i> Rama</span><strong>02-palette-api</strong></div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell chapter">
+            <span class="number">03</span>
+            <h2>Seguridad</h2>
+            <p class="mono">03-production-hardening</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Configuración</p>
+            <h2>Configuración de la API</h2>
+            <table class="table">
+              <thead><tr><th>Variable</th><th>Valor</th><th>Responsabilidad</th></tr></thead>
+              <tbody>
+                <tr><td><span class="mono">CORS_ORIGINS</span></td><td>Lista</td><td>Orígenes permitidos</td></tr>
+                <tr><td><span class="mono">TRUSTED_HOSTS</span></td><td>Lista</td><td>Hosts HTTP válidos</td></tr>
+                <tr><td><span class="mono">API_RATE_LIMIT</span></td><td>10 por segundo</td><td>Límite general por IP</td></tr>
+                <tr><td><span class="mono">PALETTE_RATE_LIMIT</span></td><td>2 por segundo</td><td>Límite del procesamiento</td></tr>
+              </tbody>
+            </table>
+            <p class="lead">El repositorio incluye un archivo de ejemplo. La configuración local no se versiona.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Seguridad</p>
+            <h2>Seguridad</h2>
+            <div class="grid-4">
+              <article class="card"><span class="card-icon"><i class="fa-solid fa-globe"></i></span><h3>CORS</h3><p>Orígenes, métodos y encabezados explícitos.</p></article>
+              <article class="card"><span class="card-icon" style="--card-color:var(--cyan)"><i class="fa-solid fa-gauge"></i></span><h3>Rate limit</h3><p>Límite general y límite para K-means.</p></article>
+              <article class="card"><span class="card-icon" style="--card-color:var(--orange)"><i class="fa-solid fa-file-shield"></i></span><h3>Archivos</h3><p>MIME, tamaño y decodificación real.</p></article>
+              <article class="card"><span class="card-icon" style="--card-color:var(--pink)"><i class="fa-solid fa-fingerprint"></i></span><h3>Request ID</h3><p>Identificador único para respuestas, errores y logs.</p></article>
+            </div>
+            <div class="warning" style="margin-top:28px"><strong>CORS no es autenticación.</strong> Controla qué orígenes del navegador pueden leer una respuesta.</div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Repositorio</p>
+            <h2>Ramas del taller</h2>
+            <table class="table">
+              <thead><tr><th>Rama</th><th>Resultado disponible</th></tr></thead>
+              <tbody>
+                <tr><td><span class="mono">00-starter</span></td><td>Estructura y dependencias</td></tr>
+                <tr><td><span class="mono">01-api-foundation</span></td><td>FastAPI, ping y Swagger</td></tr>
+                <tr><td><span class="mono">02-palette-api</span></td><td>Upload, K-means y tests</td></tr>
+                <tr><td><span class="mono">03-production-hardening</span></td><td>Seguridad y límites</td></tr>
+                <tr><td><span class="mono">04-vue-integration</span></td><td>Preview, petición y paleta</td></tr>
+              </tbody>
+            </table>
+            <div class="success" style="margin-top:24px">Si alguien queda atrás, cambia a la rama anterior y continúa con el grupo.</div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell">
+            <p class="eyebrow">API terminada</p>
+            <h2>Lo que implementamos</h2>
+            <div class="flow">
+              <div class="flow-step" style="--flow-color:var(--primary)"><span class="index">01</span><i class="fa-solid fa-code-branch"></i><strong>API</strong><p>Versión 1</p></div>
+              <div class="flow-step" style="--flow-color:var(--cyan)"><span class="index">02</span><i class="fa-solid fa-file-contract"></i><strong>Tipar</strong><p>Modelos y errores</p></div>
+              <div class="flow-step" style="--flow-color:var(--lime)"><span class="index">03</span><i class="fa-solid fa-compress"></i><strong>Reducir</strong><p>Controlar el costo</p></div>
+              <div class="flow-step" style="--flow-color:var(--orange)"><span class="index">04</span><i class="fa-solid fa-vial"></i><strong>Probar</strong><p>Casos en Postman</p></div>
+              <div class="flow-step" style="--flow-color:var(--pink)"><span class="index">05</span><i class="fa-solid fa-shield-halved"></i><strong>Proteger</strong><p>Validación y límites</p></div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell chapter">
+            <span class="number">04</span>
+            <h2>Frontend</h2>
+            <p class="mono">04-vue-integration</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Último paso</p>
+            <h2>Mostrar la respuesta</h2>
+            <div class="grid-3">
+              <article class="card"><span class="card-icon"><i class="fa-regular fa-image"></i></span><h3>Cargar</h3><p>Vue selecciona la imagen y prepara el formulario.</p></article>
+              <article class="card"><span class="card-icon" style="--card-color:var(--cyan)"><i class="fa-solid fa-arrow-up-from-bracket"></i></span><h3>Consumir</h3><p>Envía la petición al endpoint que ya validamos con Postman.</p></article>
+              <article class="card"><span class="card-icon" style="--card-color:var(--pink)"><i class="fa-solid fa-swatchbook"></i></span><h3>Renderizar</h3><p>Muestra la paleta devuelta por la API.</p></article>
+            </div>
+            <div class="success" style="margin-top:28px">El frontend no implementa el procesamiento: presenta el resultado producido por la API.</div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Demo final</p>
+            <h2>Probar el frontend</h2>
+            <div class="grid-3">
+              <article class="card"><div class="metric">01</div><h3 style="margin-top:15px">Cargar</h3><p>Seleccionar una imagen válida.</p></article>
+              <article class="card"><div class="metric">02</div><h3 style="margin-top:15px">Procesar</h3><p>Enviar la imagen a la API.</p></article>
+              <article class="card"><div class="metric">03</div><h3 style="margin-top:15px">Comprobar</h3><p>Comparar la paleta con la respuesta obtenida en Postman.</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell chapter">
+            <img src="assets/apicolors-mark.svg" alt="API a todo color" style="width:180px;border-radius:35px;margin:0 auto 28px;box-shadow:0 16px 45px rgba(42,37,91,.12)">
+            <h2>Preguntas</h2>
+            <p><i class="fa-brands fa-github"></i> github.com/menene/apicolors</p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        width: 1600,
+        height: 900,
+        margin: 0.035,
+        controls: true,
+        controlsTutorial: false,
+        progress: true,
+        center: false,
+        slideNumber: "c/t",
+        transition: "fade",
+        backgroundTransition: "fade",
+        plugins: [RevealNotes],
+      });
+
+      const sample = document.querySelector("#kmeans-sample");
+      const clusters = [
+        { count: 36, color: "#4d36d8", x: 23, y: 30, rx: 15, ry: 19 },
+        { count: 27, color: "#23b9cf", x: 76, y: 29, rx: 14, ry: 18 },
+        { count: 20, color: "#9cbc15", x: 27, y: 72, rx: 14, ry: 16 },
+        { count: 10, color: "#ea4c89", x: 75, y: 72, rx: 12, ry: 14 },
+        { count: 7, color: "#d4a91c", x: 51, y: 53, rx: 9, ry: 12 },
+      ];
+
+      clusters.forEach(({ count, color, x, y, rx, ry }) => {
+        for (let index = 0; index < count; index += 1) {
+          const angle = index * 2.39996;
+          const radius = Math.sqrt((index + 0.5) / count);
+          const dot = document.createElement("i");
+          dot.className = "dot";
+          dot.style.setProperty("--dot", color);
+          dot.style.left = `${x + Math.cos(angle) * rx * radius}%`;
+          dot.style.top = `${y + Math.sin(angle) * ry * radius}%`;
+          sample.appendChild(dot);
+        }
+      });
+    </script>
+  </body>
+</html>
