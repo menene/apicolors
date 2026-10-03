@@ -1,40 +1,34 @@
-# API a todo color · 03 Production Hardening
+# API a todo color · 04 Frontend
 
-Tercera etapa funcional del taller. Esta rama conserva el API de paletas y añade controles para exponerlo de forma pública.
+Cuarta etapa del taller. Esta rama añade una aplicación Vue 3 para consumir el API construido en las ramas anteriores.
 
 ## Incluye
 
-- Contrato uniforme para errores HTTP, validación y rate limiting.
-- `X-Request-ID` generado por el API o conservado cuando el cliente envía uno válido.
-- CORS restringido a los orígenes configurados.
-- Validación del encabezado `Host`.
-- Rate limiting por dirección IP.
-- Límite general de `10/second` aplicado a las rutas regulares del API.
-- Límite específico de `2/second` para `POST /api/v1/palettes`.
-- Respuestas `429 Too Many Requests` con `Retry-After`.
+- Interfaz creada con Vue 3 y compilada con Vite.
+- Selección o drag and drop de imágenes JPEG, PNG y WebP.
+- Validación del archivo antes de enviarlo.
+- Vista previa de la imagen.
+- Selector de 3 a 8 colores.
+- Presentación de HEX, RGB y porcentaje.
+- Copia de valores HEX al portapapeles.
+- Temas claro y oscuro.
+- Caddy sirve la SPA y reenvía `/api`, `/docs` y `/openapi.json` al backend.
+- Docker Compose inicia el frontend cuando el healthcheck del API está listo.
 
-El endpoint de paletas tiene un límite menor porque decodificar imágenes y ejecutar K-means consume más CPU que responder al ping.
+## Flujo
 
-## Contrato de errores
+1. El navegador envía el formulario a `/api/v1/palettes`.
+2. Caddy reenvía la petición al servicio `api:8000` usando la red de Docker Compose.
+3. FastAPI valida y procesa la imagen.
+4. Vue muestra la paleta devuelta por el API.
 
-Todos los errores producidos por el API utilizan la misma estructura:
-
-```json
-{
-  "error": {
-    "code": "unsupported_media_type",
-    "message": "Formato no permitido. Utiliza JPEG, PNG o WebP.",
-    "request_id": "workshop-request-01"
-  }
-}
-```
-
-`code` permite que el cliente identifique el error sin interpretar el mensaje. `request_id` relaciona la respuesta con los logs del servidor.
+El navegador no necesita conocer la dirección interna del contenedor del API.
 
 ## Variables de entorno
 
 | Variable | Uso |
 | --- | --- |
+| `APP_PORT` | Puerto público de la aplicación Vue. |
 | `API_PORT` | Puerto publicado por Docker Compose. |
 | `CORS_ORIGINS` | Orígenes autorizados, separados por comas. |
 | `TRUSTED_HOSTS` | Valores permitidos para el encabezado `Host`. |
@@ -48,21 +42,31 @@ cp .env.example .env
 docker compose up --build
 ```
 
-La API queda disponible en `http://127.0.0.1:8087`.
+La aplicación queda disponible en `http://127.0.0.1:8086`.
 
 | Recurso | URL |
 | --- | --- |
+| Aplicación | `http://127.0.0.1:8086` |
 | Ping | `http://127.0.0.1:8087/api/v1/ping` |
 | Paletas | `http://127.0.0.1:8087/api/v1/palettes` |
 | Swagger | `http://127.0.0.1:8087/docs` |
 | OpenAPI | `http://127.0.0.1:8087/openapi.json` |
 
+Swagger también está disponible a través de Caddy en `http://127.0.0.1:8086/docs`.
+
 ## Probar
 
 ```bash
 docker compose run --rm -v ./api:/app api pytest
+npm --prefix frontend run build
 ```
 
-## Siguiente rama
+La compilación del frontend también se ejecuta durante `docker compose build`.
 
-`04-vue-integration` añade la interfaz Vue 3 y la conecta con el API.
+## Estructura
+
+```text
+api/          FastAPI, procesamiento y pruebas
+frontend/     Vue 3, Vite y Caddy
+docker-compose.yml
+```

@@ -20,3 +20,13 @@ services:
       timeout: 3s
       retries: 5
       start_period: 5s
+
+  frontend:
+    build:
+      context: ./frontend
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${APP_PORT:-8086}:80"
