@@ -1,6 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request, Response
 
-from app.schemas import PingResponse
+from app.core.config import settings
+from app.core.rate_limit import limiter
+from app.schemas import ErrorResponse, PingResponse
 
 
 router = APIRouter(tags=["system"])
@@ -9,7 +11,9 @@ router = APIRouter(tags=["system"])
 @router.get(
     "/ping",
     response_model=PingResponse,
+    responses={429: {"model": ErrorResponse, "description": "Rate limit exceeded"}},
     summary="Check API availability",
 )
-async def ping() -> PingResponse:
+@limiter.limit(settings.api_rate_limit)
+async def ping(request: Request, response: Response) -> PingResponse:
     return PingResponse(message="pong")

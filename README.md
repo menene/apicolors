@@ -1,19 +1,45 @@
-# API a todo color · 02 Palette API
+# API a todo color · 03 Production Hardening
 
-Segunda etapa funcional del taller. Esta rama recibe una imagen, extrae sus colores dominantes y devuelve una paleta ordenada por frecuencia.
+Tercera etapa funcional del taller. Esta rama conserva el API de paletas y añade controles para exponerlo de forma pública.
 
 ## Incluye
 
-- `POST /api/v1/palettes` con `multipart/form-data`.
-- Imágenes JPEG, PNG y WebP de hasta 5 MB.
-- Entre 3 y 8 colores solicitados.
-- Corrección de orientación EXIF y conversión a RGB.
-- Thumbnail máximo de 200 × 200 píxeles.
-- Matriz NumPy `N × 3` y agrupamiento con K-means.
-- Respuesta tipada con HEX, RGB, porcentaje, dimensiones y tiempo.
-- Pruebas del endpoint y del procesamiento.
+- Contrato uniforme para errores HTTP, validación y rate limiting.
+- `X-Request-ID` generado por el API o conservado cuando el cliente envía uno válido.
+- CORS restringido a los orígenes configurados.
+- Validación del encabezado `Host`.
+- Rate limiting por dirección IP.
+- Límite general de `10/second` aplicado a las rutas regulares del API.
+- Límite específico de `2/second` para `POST /api/v1/palettes`.
+- Respuestas `429 Too Many Requests` con `Retry-After`.
 
-Los errores todavía utilizan el formato predeterminado de FastAPI. El contrato uniforme, CORS, request IDs y rate limiting se añaden en la siguiente rama.
+El endpoint de paletas tiene un límite menor porque decodificar imágenes y ejecutar K-means consume más CPU que responder al ping.
+
+## Contrato de errores
+
+Todos los errores producidos por el API utilizan la misma estructura:
+
+```json
+{
+  "error": {
+    "code": "unsupported_media_type",
+    "message": "Formato no permitido. Utiliza JPEG, PNG o WebP.",
+    "request_id": "workshop-request-01"
+  }
+}
+```
+
+`code` permite que el cliente identifique el error sin interpretar el mensaje. `request_id` relaciona la respuesta con los logs del servidor.
+
+## Variables de entorno
+
+| Variable | Uso |
+| --- | --- |
+| `API_PORT` | Puerto publicado por Docker Compose. |
+| `CORS_ORIGINS` | Orígenes autorizados, separados por comas. |
+| `TRUSTED_HOSTS` | Valores permitidos para el encabezado `Host`. |
+| `API_RATE_LIMIT` | Límite predeterminado por IP. |
+| `PALETTE_RATE_LIMIT` | Límite del procesamiento de paletas por IP. |
 
 ## Ejecutar
 
@@ -39,4 +65,4 @@ docker compose run --rm -v ./api:/app api pytest
 
 ## Siguiente rama
 
-`03-production-hardening` añade errores uniformes, CORS, request IDs y rate limiting.
+`04-vue-integration` añade la interfaz Vue 3 y la conecta con el API.

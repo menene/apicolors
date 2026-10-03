@@ -5,6 +5,11 @@ services:
     restart: unless-stopped
     ports:
       - "127.0.0.1:${API_PORT:-8087}:8000"
+    environment:
+      CORS_ORIGINS: "${CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}"
+      TRUSTED_HOSTS: "${TRUSTED_HOSTS:-localhost,127.0.0.1,api,testserver}"
+      API_RATE_LIMIT: "${API_RATE_LIMIT:-10/second}"
+      PALETTE_RATE_LIMIT: "${PALETTE_RATE_LIMIT:-2/second}"
     healthcheck:
       test:
         - CMD
