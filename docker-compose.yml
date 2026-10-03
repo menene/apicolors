@@ -1,0 +1,7 @@
+services:
+  api:
+    build:
+      context: ./api
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${API_PORT:-8087}:8000"
