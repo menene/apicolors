@@ -6,6 +6,5 @@ from app.core.config import settings
 
 limiter = Limiter(
     key_func=get_ipaddr,
-    default_limits=[settings.api_rate_limit],
     headers_enabled=True,
 )

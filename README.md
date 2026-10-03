@@ -446,18 +446,17 @@ Las ramas son checkpoints acumulativos. Cada una representa el resultado termina
 
 | Rama | Resultado visible |
 | --- | --- |
-| `00-starter` | Estructura, dependencias, estilos y pruebas preparadas |
+| `00-starter` | FastAPI mínima, Docker Compose y prueba inicial |
 | `01-api-foundation` | FastAPI, `/api/v1/ping`, modelos y Swagger |
 | `02-palette-api` | Upload, validaciones, K-means y tests del backend |
-| `03-vue-integration` | Preview, `FormData`, estados y paleta interactiva |
-| `04-docker-compose` | Dockerfiles, Caddy, red interna y Compose |
-| `05-production-hardening` | CORS, hosts, request IDs, rate limiting y headers |
+| `03-production-hardening` | CORS, hosts, request IDs, rate limiting y errores uniformes |
+| `04-frontend` | Vue 3, preview, `FormData`, Caddy y paleta interactiva |
 | `main` | Solución final, documentación y material del taller |
 
 Si alguien queda atrás, puede continuar desde el checkpoint terminado:
 
 ```bash
-git switch 03-vue-integration
+git switch 03-production-hardening
 docker compose up --build
 ```
 

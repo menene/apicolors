@@ -1,3 +1,4 @@
+from collections.abc import Mapping
 from typing import Any, Type
 
 from fastapi import FastAPI, Request, status
@@ -17,6 +18,7 @@ def error_response(
     code: str,
     message: str,
     details: list[dict[str, Any]] | None = None,
+    headers: Mapping[str, str] | None = None,
 ) -> JSONResponse:
     error: dict[str, Any] = {
         "code": code,
@@ -25,7 +27,11 @@ def error_response(
     }
     if details:
         error["details"] = details
-    return JSONResponse(status_code=status_code, content={"error": error})
+    return JSONResponse(
+        status_code=status_code,
+        content={"error": error},
+        headers=headers,
+    )
 
 
 def register_error_handlers(
@@ -42,7 +48,13 @@ def register_error_handlers(
                 status.HTTP_405_METHOD_NOT_ALLOWED: "method_not_allowed",
             }.get(exc.status_code, "http_error")
             message = str(exc.detail)
-        return error_response(request, exc.status_code, code, message)
+        return error_response(
+            request,
+            exc.status_code,
+            code,
+            message,
+            headers=exc.headers,
+        )
 
     @app.exception_handler(RequestValidationError)
     async def validation_exception_handler(
@@ -50,7 +62,9 @@ def register_error_handlers(
     ) -> JSONResponse:
         details = [
             {
-                "field": ".".join(str(part) for part in error["loc"] if part != "body"),
+                "field": ".".join(
+                    str(part) for part in error["loc"] if part != "body"
+                ),
                 "message": error["msg"],
                 "type": error["type"],
             }

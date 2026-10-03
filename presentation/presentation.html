@@ -162,6 +162,31 @@
       .service p { color: var(--muted); font-size: .68em; }
       .arrow { position: relative; display: grid; place-items: center; color: var(--primary); font-size: 1.2em; }
 
+      .definition { display: grid; grid-template-columns: .9fr 1.1fr; align-items: center; gap: 70px; margin-top: 42px; }
+      .definition-statement { padding-left: 30px; border-left: 8px solid var(--primary); font-size: 1.05em; font-weight: 750; line-height: 1.38; letter-spacing: -.025em; }
+      .definition-statement strong { color: var(--primary); }
+      .definition-parts { display: grid; gap: 22px; }
+      .definition-part { display: grid; grid-template-columns: 58px 1fr; align-items: center; gap: 18px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+      .definition-part:last-child { padding-bottom: 0; border-bottom: 0; }
+      .definition-part i { display: grid; width: 58px; height: 58px; place-items: center; border-radius: 16px; color: #fff; background: var(--part-color, var(--primary)); }
+      .definition-part strong { display: block; font-size: .68em; }
+      .definition-part span { display: block; margin-top: 4px; color: var(--muted); font-size: .56em; }
+
+      .api-bridge { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 13px; color: var(--primary); }
+      .api-bridge i { font-size: 1.15em; }
+      .api-bridge span { padding: 7px 10px; border-radius: 8px; color: #fff; background: var(--primary); font: 800 .45em "Fira Code", monospace; }
+      .responsibilities { display: grid; gap: 11px; margin-top: 24px; padding: 0; list-style: none; }
+      .responsibilities li { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .6em; }
+      .responsibilities i { color: var(--green); font-size: .75em; }
+
+      .analogy-figure { width: 68%; margin: 14px auto 0; }
+      .analogy-image { display: block; width: 100%; border: 1px solid #dfd5bd; border-radius: 18px; object-fit: contain; background: #fff7e7; box-shadow: 0 18px 48px rgba(42, 37, 91, .1); }
+      .analogy-map { display: grid; grid-template-columns: repeat(5, 1fr); margin-top: 14px; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+      .analogy-map span { padding: 11px 8px; border-right: 1px solid var(--line); color: var(--muted); font-size: .45em; text-align: center; }
+      .analogy-map span:last-child { border-right: 0; }
+      .analogy-map strong { color: var(--primary-deep); }
+      .source-note { margin: 8px 0 0 !important; color: var(--muted); font-size: .36em; text-align: right; }
+
       .exercise { border: 3px solid var(--primary); background: var(--surface); }
       .exercise-grid { margin-top: 42px; }
       .checklist { display: grid; gap: 18px; margin: 0; padding: 0; list-style: none; }
@@ -189,7 +214,7 @@
       .fragment.fade-up { transform: translateY(25px); }
 
       @media (max-width: 900px) {
-        .cover, .profile, .grid-2, .grid-3, .grid-4, .contract, .architecture { grid-template-columns: 1fr; }
+        .cover, .profile, .grid-2, .grid-3, .grid-4, .contract, .architecture, .definition { grid-template-columns: 1fr; }
         .cover-mark { display: none; }
         .profile-photo { display: none; }
       }
@@ -231,6 +256,87 @@
             </div>
           </div>
           <aside class="notes">Presentación breve. El objetivo del taller es diseñar, implementar y probar la API.</aside>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Concepto</p>
+            <h2>Una API es un contrato de comunicación</h2>
+            <div class="definition">
+              <p class="definition-statement">
+                Define <strong>qué puede solicitar un cliente</strong>, cómo debe enviar la petición y qué respuesta recibirá.
+              </p>
+              <div class="definition-parts">
+                <div class="definition-part">
+                  <i class="fa-solid fa-paper-plane" style="--part-color:var(--cyan)"></i>
+                  <div><strong>Petición</strong><span>El cliente indica la operación y envía los datos necesarios.</span></div>
+                </div>
+                <div class="definition-part">
+                  <i class="fa-solid fa-route"></i>
+                  <div><strong>Endpoint</strong><span>La API define la ruta, el método y las reglas de entrada.</span></div>
+                </div>
+                <div class="definition-part">
+                  <i class="fa-solid fa-reply" style="--part-color:var(--pink)"></i>
+                  <div><strong>Respuesta</strong><span>El servidor devuelve un estado HTTP y los datos acordados.</span></div>
+                </div>
+              </div>
+            </div>
+            <p class="lead">La API no es la pantalla ni la base de datos: es el punto de acceso al backend.</p>
+          </div>
+          <aside class="notes">Definir API como contrato. La clave es que cliente y servidor pueden cambiar internamente mientras respeten ese contrato.</aside>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Separación de responsabilidades</p>
+            <h2>Frontend presenta; backend procesa</h2>
+            <div class="architecture">
+              <article class="service">
+                <div class="service-head">
+                  <span class="card-icon" style="--card-color:var(--cyan)"><i class="fa-solid fa-display"></i></span>
+                  <div><h3>Frontend</h3><p>Se ejecuta en el navegador.</p></div>
+                </div>
+                <ul class="responsibilities">
+                  <li><i class="fa-solid fa-check"></i> Recibe la interacción del usuario.</li>
+                  <li><i class="fa-solid fa-check"></i> Envía peticiones al API.</li>
+                  <li><i class="fa-solid fa-check"></i> Presenta la respuesta.</li>
+                </ul>
+              </article>
+              <div class="api-bridge"><i class="fa-solid fa-arrow-right-arrow-left"></i><span>API</span></div>
+              <article class="service">
+                <div class="service-head">
+                  <span class="card-icon" style="--card-color:var(--pink)"><i class="fa-solid fa-server"></i></span>
+                  <div><h3>Backend</h3><p>Se ejecuta en el servidor.</p></div>
+                </div>
+                <ul class="responsibilities">
+                  <li><i class="fa-solid fa-check"></i> Valida la petición.</li>
+                  <li><i class="fa-solid fa-check"></i> Ejecuta la lógica y accede a datos.</li>
+                  <li><i class="fa-solid fa-check"></i> Devuelve una respuesta consistente.</li>
+                </ul>
+              </article>
+            </div>
+            <p class="lead">En este proyecto Vue se ocupa de la interfaz y FastAPI del procesamiento de la imagen.</p>
+          </div>
+          <aside class="notes">Separar responsabilidades. El frontend no ejecuta K-means y el backend no decide cómo se dibuja la paleta.</aside>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Analogía</p>
+            <h2>La API funciona como el mesero</h2>
+            <figure class="analogy-figure">
+              <img class="analogy-image" src="assets/api-restaurant-analogy.jpg" alt="Analogía de una API como el mesero que comunica al cliente con la cocina de un restaurante">
+              <figcaption class="analogy-map">
+                <span><strong>Cliente</strong><br>Usuario</span>
+                <span><strong>Menú</strong><br>Documentación</span>
+                <span><strong>Mesero</strong><br>API</span>
+                <span><strong>Cocina</strong><br>Backend</span>
+                <span><strong>Plato</strong><br>Respuesta</span>
+              </figcaption>
+            </figure>
+            <p class="source-note"><a href="https://media.licdn.com/dms/image/v2/D5622AQHpIxtRrclSYA/feedshare-shrink_1280/B56ZsoGOueG4As-/0/1765904283606?e=1792627200&amp;v=beta&amp;t=BYb8THH9X4uUb6mRekpGrbZR2sPKSLIazYPufUWDENo">Fuente de la imagen: LinkedIn</a></p>
+          </div>
+          <aside class="notes">El cliente elige usando el menú. El mesero recibe un pedido válido, lo lleva a la cocina y devuelve el resultado. El cliente no necesita entrar a la cocina ni conocer su implementación.</aside>
         </section>
 
         <section>
@@ -279,6 +385,24 @@
               <article class="card"><span class="card-icon" style="--card-color:var(--orange)"><i class="fa-solid fa-paper-plane"></i></span><h3>Postman</h3><p>Peticiones HTTP, headers, body form-data y lectura de respuestas.</p></article>
               <article class="card"><span class="card-icon" style="--card-color:var(--pink)"><i class="fa-brands fa-docker"></i></span><h3>Docker</h3><p>Construir imágenes e iniciar servicios con Compose.</p></article>
             </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell top">
+            <p class="eyebrow">Repositorio</p>
+            <h2>Ramas del taller</h2>
+            <table class="table">
+              <thead><tr><th>Rama</th><th>Resultado disponible</th></tr></thead>
+              <tbody>
+                <tr><td><span class="mono">00-starter</span></td><td>FastAPI mínima y Docker Compose</td></tr>
+                <tr><td><span class="mono">01-api-foundation</span></td><td>FastAPI, ping y Swagger</td></tr>
+                <tr><td><span class="mono">02-palette-api</span></td><td>Upload, K-means y tests</td></tr>
+                <tr><td><span class="mono">03-production-hardening</span></td><td>Seguridad y límites</td></tr>
+                <tr><td><span class="mono">04-frontend</span></td><td>Preview, petición y paleta</td></tr>
+              </tbody>
+            </table>
+            <div class="success" style="margin-top:24px">Si alguien queda atrás, cambia a la rama anterior y continúa con el grupo.</div>
           </div>
         </section>
 
@@ -539,42 +663,10 @@
         </section>
 
         <section>
-          <div class="slide-shell top">
-            <p class="eyebrow">Repositorio</p>
-            <h2>Ramas del taller</h2>
-            <table class="table">
-              <thead><tr><th>Rama</th><th>Resultado disponible</th></tr></thead>
-              <tbody>
-                <tr><td><span class="mono">00-starter</span></td><td>Estructura y dependencias</td></tr>
-                <tr><td><span class="mono">01-api-foundation</span></td><td>FastAPI, ping y Swagger</td></tr>
-                <tr><td><span class="mono">02-palette-api</span></td><td>Upload, K-means y tests</td></tr>
-                <tr><td><span class="mono">03-production-hardening</span></td><td>Seguridad y límites</td></tr>
-                <tr><td><span class="mono">04-vue-integration</span></td><td>Preview, petición y paleta</td></tr>
-              </tbody>
-            </table>
-            <div class="success" style="margin-top:24px">Si alguien queda atrás, cambia a la rama anterior y continúa con el grupo.</div>
-          </div>
-        </section>
-
-        <section>
-          <div class="slide-shell">
-            <p class="eyebrow">API terminada</p>
-            <h2>Lo que implementamos</h2>
-            <div class="flow">
-              <div class="flow-step" style="--flow-color:var(--primary)"><span class="index">01</span><i class="fa-solid fa-code-branch"></i><strong>API</strong><p>Versión 1</p></div>
-              <div class="flow-step" style="--flow-color:var(--cyan)"><span class="index">02</span><i class="fa-solid fa-file-contract"></i><strong>Tipar</strong><p>Modelos y errores</p></div>
-              <div class="flow-step" style="--flow-color:var(--lime)"><span class="index">03</span><i class="fa-solid fa-compress"></i><strong>Reducir</strong><p>Controlar el costo</p></div>
-              <div class="flow-step" style="--flow-color:var(--orange)"><span class="index">04</span><i class="fa-solid fa-vial"></i><strong>Probar</strong><p>Casos en Postman</p></div>
-              <div class="flow-step" style="--flow-color:var(--pink)"><span class="index">05</span><i class="fa-solid fa-shield-halved"></i><strong>Proteger</strong><p>Validación y límites</p></div>
-            </div>
-          </div>
-        </section>
-
-        <section>
           <div class="slide-shell chapter">
             <span class="number">04</span>
             <h2>Frontend</h2>
-            <p class="mono">04-vue-integration</p>
+            <p class="mono">04-frontend</p>
           </div>
         </section>
 
@@ -599,6 +691,20 @@
               <article class="card"><div class="metric">01</div><h3 style="margin-top:15px">Cargar</h3><p>Seleccionar una imagen válida.</p></article>
               <article class="card"><div class="metric">02</div><h3 style="margin-top:15px">Procesar</h3><p>Enviar la imagen a la API.</p></article>
               <article class="card"><div class="metric">03</div><h3 style="margin-top:15px">Comprobar</h3><p>Comparar la paleta con la respuesta obtenida en Postman.</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="slide-shell">
+            <p class="eyebrow">API terminada</p>
+            <h2>Lo que implementamos</h2>
+            <div class="flow">
+              <div class="flow-step" style="--flow-color:var(--primary)"><span class="index">01</span><i class="fa-solid fa-code-branch"></i><strong>API</strong><p>Versión 1</p></div>
+              <div class="flow-step" style="--flow-color:var(--cyan)"><span class="index">02</span><i class="fa-solid fa-file-contract"></i><strong>Tipar</strong><p>Modelos y errores</p></div>
+              <div class="flow-step" style="--flow-color:var(--lime)"><span class="index">03</span><i class="fa-solid fa-compress"></i><strong>Reducir</strong><p>Controlar el costo</p></div>
+              <div class="flow-step" style="--flow-color:var(--orange)"><span class="index">04</span><i class="fa-solid fa-vial"></i><strong>Probar</strong><p>Casos en Postman</p></div>
+              <div class="flow-step" style="--flow-color:var(--pink)"><span class="index">05</span><i class="fa-solid fa-shield-halved"></i><strong>Proteger</strong><p>Validación y límites</p></div>
             </div>
           </div>
         </section>
