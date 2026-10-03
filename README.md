@@ -1,17 +1,19 @@
-# API a todo color · 01 API Foundation
+# API a todo color · 02 Palette API
 
-Primera etapa funcional del taller. Esta rama define la estructura versionada de la API y añade un endpoint para comprobar su disponibilidad.
+Segunda etapa funcional del taller. Esta rama recibe una imagen, extrae sus colores dominantes y devuelve una paleta ordenada por frecuencia.
 
 ## Incluye
 
-- Aplicación creada mediante una factory.
-- Routers separados bajo `/api/v1`.
-- `GET /api/v1/ping` con respuesta tipada.
-- Swagger en `/docs` y esquema OpenAPI en `/openapi.json`.
-- Healthcheck del contenedor basado en el endpoint de ping.
-- Pruebas del endpoint y del versionado.
+- `POST /api/v1/palettes` con `multipart/form-data`.
+- Imágenes JPEG, PNG y WebP de hasta 5 MB.
+- Entre 3 y 8 colores solicitados.
+- Corrección de orientación EXIF y conversión a RGB.
+- Thumbnail máximo de 200 × 200 píxeles.
+- Matriz NumPy `N × 3` y agrupamiento con K-means.
+- Respuesta tipada con HEX, RGB, porcentaje, dimensiones y tiempo.
+- Pruebas del endpoint y del procesamiento.
 
-Todavía no incluye carga de imágenes, K-means, seguridad ni frontend.
+Los errores todavía utilizan el formato predeterminado de FastAPI. El contrato uniforme, CORS, request IDs y rate limiting se añaden en la siguiente rama.
 
 ## Ejecutar
 
@@ -25,6 +27,7 @@ La API queda disponible en `http://127.0.0.1:8087`.
 | Recurso | URL |
 | --- | --- |
 | Ping | `http://127.0.0.1:8087/api/v1/ping` |
+| Paletas | `http://127.0.0.1:8087/api/v1/palettes` |
 | Swagger | `http://127.0.0.1:8087/docs` |
 | OpenAPI | `http://127.0.0.1:8087/openapi.json` |
 
@@ -36,4 +39,4 @@ docker compose run --rm -v ./api:/app api pytest
 
 ## Siguiente rama
 
-`02-palette-api` añade el upload de imágenes, el procesamiento RGB y K-means.
+`03-production-hardening` añade errores uniformes, CORS, request IDs y rate limiting.
